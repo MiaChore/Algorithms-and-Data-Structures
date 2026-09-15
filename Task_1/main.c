@@ -107,7 +107,7 @@ bool namesErrorCompiler(char inputName[], char outputName[]) {
     if (errorCheck) {
         printf("Успешно: Проверка названий файлов прошла без ошибок\n");
             
-        return true;
+        return errorCheck;
     } else {
         printf("Ошибка: Работа завершена. Исправь ошибки и повтори попытку, ма бой\n");
         return errorCheck;
