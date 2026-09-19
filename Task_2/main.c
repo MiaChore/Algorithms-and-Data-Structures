@@ -34,6 +34,10 @@ int priority(int operation) {
 }
 
 bool needBrackets(int parent, int child, bool rightSide) {
+    if (parent == '-' && child == '~' && rightSide) {
+        return true;
+    }
+   
     int parentPriority = priority(parent);
     int childPriority = priority(child);
 
