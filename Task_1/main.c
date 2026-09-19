@@ -1,9 +1,9 @@
-//Крылов М. И. ПС-22
-//Задание № 10
-//Некоторый текст состоит из нескольких частей, записанных в отдельных файлах.
-//Имена этих файлов и общий заголовок текста указаны в отдельном  файле.
-//Создать файл с полным текстом. Заголовок должен содержаться в центре первой строки
-// 6 баллов
+//РљСЂС‹Р»РѕРІ Рњ. Р. РџРЎ-22
+//Р—Р°РґР°РЅРёРµ в„– 10
+//РќРµРєРѕС‚РѕСЂС‹Р№ С‚РµРєСЃС‚ СЃРѕСЃС‚РѕРёС‚ РёР· РЅРµСЃРєРѕР»СЊРєРёС… С‡Р°СЃС‚РµР№, Р·Р°РїРёСЃР°РЅРЅС‹С… РІ РѕС‚РґРµР»СЊРЅС‹С… С„Р°Р№Р»Р°С….
+//РРјРµРЅР° СЌС‚РёС… С„Р°Р№Р»РѕРІ Рё РѕР±С‰РёР№ Р·Р°РіРѕР»РѕРІРѕРє С‚РµРєСЃС‚Р° СѓРєР°Р·Р°РЅС‹ РІ РѕС‚РґРµР»СЊРЅРѕРј С„Р°Р№Р»Рµ.
+//РЎРѕР·РґР°С‚СЊ С„Р°Р№Р» СЃ РїРѕР»РЅС‹Рј С‚РµРєСЃС‚РѕРј. Р—Р°РіРѕР»РѕРІРѕРє РґРѕР»Р¶РµРЅ СЃРѕРґРµСЂР¶Р°С‚СЊСЃСЏ РІ С†РµРЅС‚СЂРµ РїРµСЂРІРѕР№ СЃС‚СЂРѕРєРё
+// 6 Р±Р°Р»Р»РѕРІ
 
 #include <stdio.h>
 #include <stdbool.h>
@@ -24,7 +24,7 @@ void removeNewLineChar(char text[]) {
 
 bool readFileName(char name[]) {
     if (fgets(name, maxName, stdin) == NULL) {
-        printf("Ошибка: не удалось прочитать имя файла\n");
+        printf("РћС€РёР±РєР°: РќРµ СѓРґР°Р»РѕСЃСЊ РїСЂРѕС‡РёС‚Р°С‚СЊ РёРјСЏ С„Р°Р№Р»Р°\n");
         return false;
     }
 
@@ -42,12 +42,12 @@ bool readFileName(char name[]) {
                 symbol = getchar();
             }
 
-            printf("Ошибка: имя длиннее %d символов\n", maxName - 1);
+            printf("РћС€РёР±РєР°: РёРјСЏ РґР»РёРЅРЅРµРµ %d СЃРёРјРІРѕР»РѕРІ\n", maxName - 1);
             return false;
         }
 
         if (ferror(stdin)) {
-            printf("Ошибка чтения имени файла: %s\n", name);
+            printf("РћС€РёР±РєР° С‡С‚РµРЅРёСЏ РёРјРµРЅРё С„Р°Р№Р»Р°: %s\n", name);
             return false;
         }
     }
@@ -57,13 +57,13 @@ bool readFileName(char name[]) {
 }
 
 bool startIOReading(char input[], char output[]) {
-    printf("Введите имя файла с содержанием: ");
+    printf("Р’РІРµРґРёС‚Рµ РёРјСЏ С„Р°Р№Р»Р° СЃ СЃРѕРґРµСЂР¶Р°РЅРёРµРј: ");
 
     if (!readFileName(input)) {
         return false;
     }
 
-    printf("Введите имя выходного файла: ");
+    printf("Р’РІРµРґРёС‚Рµ РёРјСЏ РІС‹С…РѕРґРЅРѕРіРѕ С„Р°Р№Р»Р°: ");
 
     if (!readFileName(output)) {
         return false;
@@ -74,11 +74,11 @@ bool startIOReading(char input[], char output[]) {
 
 bool fileErrorCompiler(FILE *file, char fileName[]) {
     if (file == NULL) {
-        printf("Ошибка: Не существует или невозможно открыть файл %s\n", fileName);
+        printf("РћС€РёР±РєР°: РЅРµ СЃСѓС‰РµСЃС‚РІСѓРµС‚ РёР»Рё РЅРµРІРѕР·РјРѕР¶РЅРѕ РѕС‚РєСЂС‹С‚СЊ С„Р°Р№Р» %s\n", fileName);
 
         return false;
     } else {
-        printf("Успешно: файл %s открыт\n", fileName);
+        printf("РЈСЃРїРµС€РЅРѕ: С„Р°Р№Р» %s РѕС‚РєСЂС‹С‚\n", fileName);
 
         return true;
     }
@@ -91,25 +91,25 @@ bool namesErrorCompiler(char inputName[], char outputName[]) {
         i++;
     }
     if (inputName[i] == outputName[i]) {
-        printf("Ошибка: Названия файлов должно отличаться\n");
+        printf("РћС€РёР±РєР°: РЅР°Р·РІР°РЅРёСЏ С„Р°Р№Р»РѕРІ РґРѕР»Р¶РЅС‹ РѕС‚Р»РёС‡Р°С‚СЊСЃСЏ\n");
 
         errorCheck = false;
     } 
     
     if (inputName[0] == '\0') {
-        printf("Ошибка: Имя файла с контентом не может быть пустым\n");
+        printf("РћС€РёР±РєР°: РёРјСЏ С„Р°Р№Р»Р° СЃ РєРѕРЅС‚РµРЅС‚РѕРј РЅРµ РјРѕР¶РµС‚ Р±С‹С‚СЊ РїСѓСЃС‚С‹Рј\n");
         errorCheck = false;
     }
     if (outputName[0] == '\0') {
-        printf("Ошибка: Имя файла с результатом не может быть пустым\n");
+        printf("РћС€РёР±РєР°: РёРјСЏ С„Р°Р№Р»Р° СЃ СЂРµР·СѓР»СЊС‚Р°С‚РѕРј РЅРµ РјРѕР¶РµС‚ Р±С‹С‚СЊ РїСѓСЃС‚С‹Рј\n");
         errorCheck = false;
     }
     if (errorCheck) {
-        printf("Успешно: Проверка названий файлов прошла без ошибок\n");
+        printf("РЈСЃРїРµС€РЅРѕ: РїСЂРѕРІРµСЂРєР° РЅР°Р·РІР°РЅРёР№ С„Р°Р№Р»РѕРІ РїСЂРѕС€Р»Р° Р±РµР· РѕС€РёР±РѕРє\n");
             
         return errorCheck;
     } else {
-        printf("Ошибка: Работа завершена. Исправь ошибки и повтори попытку, ма бой\n");
+        printf("РћС€РёР±РєР°: СЂР°Р±РѕС‚Р° Р·Р°РІРµСЂС€РµРЅР°. РСЃРїСЂР°РІСЊ РѕС€РёР±РєРё Рё Р·Р°РїСѓСЃС‚Рё Р·Р°РЅРѕРІРѕ, РЅСѓ С‘РјР°\n");
         return errorCheck;
     }
 }
@@ -149,10 +149,10 @@ void printTitle(FILE *inputFile, FILE *outputFile) {
         title[length] = '\0';
         centralPrint(length, title, outputFile);
         fputc('\n', outputFile);
-        printf("Заголовок выведен\n");
+        printf("Р—Р°РіРѕР»РѕРІРѕРє РІС‹РІРµРґРµРЅ\n");
     } else if (!reseted) {
-        fputs("( Заголовок не найден )\n", outputFile);
-        printf("Заголовок не найден\n");
+        fputs("( Р—Р°РіРѕР»РѕРІРѕРє РЅРµ РЅР°Р№РґРµРЅ )\n", outputFile);
+        printf("Р—Р°РіРѕР»РѕРІРѕРє РЅРµ РЅР°Р№РґРµРЅ\n");
     }
 
     fputc('\n', outputFile);
@@ -183,7 +183,7 @@ bool printParts(FILE *inputFile, FILE *outputFile) {
                 if (lineLength > 0) {
                     fputc('\n', outputFile);
                 }
-                fputs("( Название файла слишком длинное )\n\n", outputFile);
+                fputs("( РќР°Р·РІР°РЅРёРµ С„Р°Р№Р»Р° СЃР»РёС€РєРѕРј РґР»РёРЅРЅРѕРµ )\n\n", outputFile);
                 success = false;
                 lineLength = 0;
                 continue;
@@ -198,18 +198,21 @@ bool printParts(FILE *inputFile, FILE *outputFile) {
             if (lineLength > 0) {
                 fputc('\n', outputFile);
             }
-            fputs("\n( Часть текста не найдена )\n\n", outputFile);
+            fputs("\n( Р§Р°СЃС‚СЊ С‚РµРєСЃС‚Р° РЅРµ РЅР°Р№РґРµРЅР° )\n\n", outputFile);
             lineLength = 0;
         } else {
             int symbol;
+
+            if (partNumber > 0) {
+                if (lineLength > 0) {
+                    fputc('\n', outputFile);
+                }
+
+                fputc('\n', outputFile);
+                lineLength = 0;
+            }
             
             while ((symbol = fgetc(part)) != EOF) {
-                if (symbol != '\n' && lineLength == lineWidth) {
-                    if (fputc('\n', outputFile) == EOF) {
-                        break;
-                    }
-                    lineLength = 0;
-                }
                 if (fputc(symbol, outputFile) == EOF) {
                     break;
                 }
@@ -217,34 +220,34 @@ bool printParts(FILE *inputFile, FILE *outputFile) {
                 if (symbol == '\n') {
                     lineLength = 0;
                 } else {
-                    lineLength++;
+                    lineLength = 1;
                 }
             }
             if (ferror(outputFile)) {
-                printf("Ошибка записи результата. Сборка прервана.\n");
+                printf("РћС€РёР±РєР° Р·Р°РїРёСЃРё СЂРµР·СѓР»СЊС‚Р°С‚Р°. Р Р°Р±РѕС‚Р° РїСЂРµСЂРІР°РЅР°.\n");
                 fclose(part);
                 return false;
             }
             if (ferror(part)) {
-                printf("Ошибка чтения части: %s\n", partName);
+                printf("РћС€РёР±РєР° С‡С‚РµРЅРёСЏ С„Р°Р№Р»Р°: %s\n", partName);
                 success = false;
-                fputs("\n( Ошибка чтения части текста )\n\n", outputFile);
+                fputs("\n( РћС€РёР±РєР° С‡С‚РµРЅРёСЏ С‡Р°СЃС‚Рё С‚РµРєСЃС‚Р° )\n\n", outputFile);
                 lineLength = 0;
                 continue;
             }
             if (fclose(part) == EOF) {
-                printf("Ошибка закрытия части: %s\n", partName);
+                printf("РћС€РёР±РєР° Р·Р°РєСЂС‹С‚РёСЏ С„Р°Р№Р»Р°: %s\n", partName);
                 success = false;
                 fclose(part);
                 continue;
             }
 
             partNumber++;
-            printf("Часть %d добавлена в результат\n", partNumber);
+            printf("Р§Р°СЃС‚СЊ %d РґРѕР±Р°РІР»РµРЅР° РІ СЂРµР·СѓР»СЊС‚Р°С‚\n", partNumber);
         }
     }
     if (!hasPartRecord && !ferror(inputFile)) {
-        fputs("( Текст не найден )\n", outputFile);
+        fputs("( РўРµРєСЃС‚ РЅРµ РЅР°Р№РґРµРЅ )\n", outputFile);
         success = false;
     }
 
@@ -262,7 +265,7 @@ int assembleText(FILE *inputFile, FILE *outputFile) {
     printTitle(inputFile, outputFile);
 
     if (ferror(inputFile)) {
-        printf("Ошибка чтения заголовка\n");
+        printf("РћС€РёР±РєР° С‡С‚РµРЅРёСЏ Р·Р°РіРѕР»РѕРІРєР°\n");
         readError = false;
     }
 
@@ -276,7 +279,7 @@ int assembleText(FILE *inputFile, FILE *outputFile) {
         }
 
         if (ferror(inputFile)) {
-            printf("Ошибка чтения списка частей\n");
+            printf("РћС€РёР±РєР° С‡С‚РµРЅРёСЏ СЃРїРёСЃРєР° С‡Р°СЃС‚РµР№\n");
             readError = false;
         }
 
@@ -286,7 +289,7 @@ int assembleText(FILE *inputFile, FILE *outputFile) {
     }
 
     if (fclose(inputFile) == EOF) {
-        printf("Ошибка закрытия входного файла\n");
+        printf("РћС€РёР±РєР° Р·Р°РєСЂС‹С‚РёСЏ РІС…РѕРґРЅРѕРіРѕ С„Р°Р№Р»Р°\n");
         readError = false;
     }
 
@@ -295,7 +298,7 @@ int assembleText(FILE *inputFile, FILE *outputFile) {
     }
 
     if (!writeError) {
-        printf("Ошибка: результат сохранён не полностью\n");
+        printf("РћС€РёР±РєР°: СЂРµР·СѓР»СЊС‚Р°С‚ СЃРѕС…СЂР°РЅС‘РЅ РЅРµ РїРѕР»РЅРѕСЃС‚СЊСЋ\n");
     }
 
     if (!readError || !writeError) {
