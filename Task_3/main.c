@@ -39,9 +39,14 @@ const char *functionName(int operation) {
     return "EXP";
 }
 
+int treeError(const char message[]) {
+    printf("Ошибка: %s\n", message);
+    return -1;
+}
+
 int newNode(char operation, int left, int right) {
     if (nodeCount == maxNodes) {
-        return -1;
+        return treeError("Превышено допустимое количество узлов");
     }
     int index = nodeCount++;
 
@@ -62,8 +67,11 @@ bool isUnaryMinus(int index, int start) {
 }
 
 int buildTree(int start, int end, int depth) {
-    if (start > end || depth > maxDepth) {
-        return -1;
+    if (start > end) {
+        return treeError("Отсутствует аргумент операции");
+    }
+    if (depth > maxDepth) {
+        return treeError("Превышена допустимая глубина дерева");
     }
 
     while (expression[start] == '(' && expression[end] == ')') {
@@ -82,7 +90,7 @@ int buildTree(int start, int end, int depth) {
         start++;
         end--;
 
-        if (start > end) return -1;
+        if (start > end) return treeError("Пустые скобки");
     }
 
     int split = -1;
@@ -156,26 +164,27 @@ int buildTree(int start, int end, int depth) {
         }
     }
 
-    if (end - start >= 4 && expression[start + 3] == '(' && expression[end] == ')') {
+    if (expression[start] >= 'A' && expression[start] <= 'Z') {
         char operation = 0;
 
-        if (strncmp(expression + start, "SIN", 3) == 0) {
-            operation = 'S';
-        }
-        if (strncmp(expression + start, "COS", 3) == 0) {
-            operation = 'C';
-        }
-        if (strncmp(expression + start, "EXP", 3) == 0) {
-            operation = 'E';
+        if (end - start >= 2) {
+            if (strncmp(expression + start, "SIN", 3) == 0) operation = 'S';
+            if (strncmp(expression + start, "COS", 3) == 0) operation = 'C';
+            if (strncmp(expression + start, "EXP", 3) == 0) operation = 'E';
         }
 
-        if (operation != 0) {
-            int argument = buildTree(start + 3, end, depth + 1);
-
-            if (argument == -1) return -1;
-
-            return newNode(operation, -1, argument);
+        if (operation == 0) {
+            return treeError("Неизвестная функция: допустимы SIN, COS и EXP");
         }
+        if (end - start < 4 || expression[start + 3] != '(' || expression[end] != ')') {
+            return treeError("После функции требуется аргумент в круглых скобках");
+        }
+
+        int argument = buildTree(start + 3, end, depth + 1);
+
+        if (argument == -1) return -1;
+
+        return newNode(operation, -1, argument);
     }
 
     if (start == end &&
@@ -185,7 +194,7 @@ int buildTree(int start, int end, int depth) {
         return newNode(expression[start], -1, -1);
     }
 
-    return -1;
+    return treeError("Пропущена операция или неверно записан аргумент");
 }
 
 void skipInput(void) {
@@ -230,47 +239,62 @@ void loadExpression(void) {
     length = 0;
 
     int symbol;
-    bool valid = true;
-
     while ((symbol = fgetc(file)) != EOF) {
         if (symbol == ' ' || symbol == '\t' || symbol == '\r' || symbol == '\n') {
             continue;
         }
 
         if (length == maxText - 1) {
-            valid = false;
-            break;
+            printf("Ошибка: выражение слишком длинное\n");
+            fclose(file);
+            return;
+        }
+
+        bool allowed = (symbol >= 'a' && symbol <= 'z') || (symbol >= 'A' && symbol <= 'Z') || symbol == '+' || symbol == '-' || symbol == '*' || symbol == '/' || symbol == '^' || symbol == '(' || symbol == ')';
+
+        if (!allowed) {
+            printf("Ошибка: недопустимый символ в выражении\n");
+            fclose(file);
+            return;
         }
 
         expression[length++] = (char)symbol;
     }
 
     if (ferror(file)) {
-        valid = false;
+        printf("Ошибка: не удалось прочитать файл\n");
+        fclose(file);
+        return;
     }
 
     fclose(file);
     expression[length] = '\0';
 
+    if (length == 0) {
+        printf("Ошибка: выражение пустое\n");
+        return;
+    }
+
     int balance = 0;
 
-    for (int i = 0; i < length && valid; i++) {
+    for (int i = 0; i < length; i++) {
         if (expression[i] == '(') balance++;
         if (expression[i] == ')') balance--;
 
-        if (balance < 0) valid = false;
+        if (balance < 0) {
+            printf("Ошибка: лишняя закрывающая скобка\n");
+            return;
+        }
     }
 
-    if (balance != 0) {
-        valid = false;
+    if (balance > 0) {
+        printf("Ошибка: не закрыта скобка\n");
+        return;
     }
 
-    if (valid) {
-        root = buildTree(0, length - 1, 0);
-    }
+    root = buildTree(0, length - 1, 0);
 
     if (root == -1) {
-        printf("Ошибка: неверное выражение или превышен допустимый размер\n");
         return;
     }
 
